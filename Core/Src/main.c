@@ -127,7 +127,7 @@ void Tim2Init(){
 	TIM2 -> DIER |= TIM_DIER_UIE;                               // Enable update interrupt
 	TIM2 -> PSC = 8000-1;                                       // 8MHz/8000 = 1MHz -> 1ms
 	TIM2 -> ARR = 1000-1;                                       // Write 1000 to auto reload register 1ms*1000=1sek
-																//(Generate interrupt every one second)
+                                                                // Generate interrupt every one second
 	__NVIC_EnableIRQ(TIM2_IRQn);								// Enable TIM2 interrupt request
 }
 // CAN
