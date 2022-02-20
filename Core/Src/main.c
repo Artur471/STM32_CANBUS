@@ -128,7 +128,7 @@ void Tim2Init(){
     TIM2 -> PSC = 8000-1;                                       // 8MHz/8000 = 1MHz -> 1ms
     TIM2 -> ARR = 1000-1;                                       // Write 1000 to auto reload register 1ms*1000=1sek
     // Generate interrupt every one second
-    __NVIC_EnableIRQ(TIM2_IRQn);								// Enable TIM2 interrupt request
+    __NVIC_EnableIRQ(TIM2_IRQn);				// Enable TIM2 interrupt request
 }
 // CAN
 void CAN1_SCE_IRQhandler(void){
@@ -147,15 +147,15 @@ void CAN1_RX0_IRQHandler(void){
 }
 // CAN filter initialization
 void CANbusFilterInit(){
-    CAN1 -> FA1R &= ~CAN_FA1R_FACT0;							// Clear filter activation register in order to enter in initialization mode
+    CAN1 -> FA1R &= ~CAN_FA1R_FACT0;			        // Clear filter activation register in order to enter in initialization mode
     CAN1 -> FMR = CAN_FMR_FINIT;                                // Enable filter initialization mode
-    while((CAN1 -> FMR & CAN_FMR_FINIT) == 0);				    // Waiting for filter initialization mode
+    while((CAN1 -> FMR & CAN_FMR_FINIT) == 0);			// Waiting for filter initialization mode
     // Configuration filter 0 in identifier mask mode
-    CAN1 -> FM1R &= ~CAN_FM1R_FBM0;							    // Filter bank 0 in identifier mask mode
-    CAN1 -> FS1R |= CAN_FS1R_FSC0;							    // Single 32-bit scale configuration
-    CAN1 -> FFA1R &= ~CAN_FFA1R_FFA0;							// Filter bank 0 assigned to FIFO 0
+    CAN1 -> FM1R &= ~CAN_FM1R_FBM0;				// Filter bank 0 in identifier mask mode
+    CAN1 -> FS1R |= CAN_FS1R_FSC0;				// Single 32-bit scale configuration
+    CAN1 -> FFA1R &= ~CAN_FFA1R_FFA0;				// Filter bank 0 assigned to FIFO 0
     CAN1 -> sFilterRegister[0].FR1 = (0xA << 21);               // Filter 0 ID message
-    CAN1 -> sFilterRegister[0].FR2 = 0;						    // Filter 0 mask value
+    CAN1 -> sFilterRegister[0].FR2 = 0;				// Filter 0 mask value
     // Configuration filter 0 in identifier list mode
     //CAN1 -> FM1R |= CAN_FM1R_FBM0;                            // Filter bank 0 in identifier list mode
     //CAN1 -> FS1R |= CAN_FS1R_FSC0;                            // Single 32 bit scale configuration
@@ -164,9 +164,9 @@ void CANbusFilterInit(){
     //CAN1 -> sFilterRegister[0].FR2 = 10 << 21;
     //CAN1 -> FFA1R |= CAN_FFA1R_FFA0;
     // Filter 0 activation
-    CAN1 -> FA1R = CAN_FA1R_FACT0;							    // Filter 0 activation
+    CAN1 -> FA1R = CAN_FA1R_FACT0;				// Filter 0 activation
     CAN1 -> FMR &= ~CAN_FMR_FINIT;                              // Software request to enter in normal mode
-    while((CAN1 -> FMR & CAN_FMR_FINIT) == 1);				    // Waiting to enter in normal mode
+    while((CAN1 -> FMR & CAN_FMR_FINIT) == 1);		        // Waiting to enter in normal mode
 }
 // Setup CANbus frame
 void CANbusSetupRemoteFrame(){
@@ -196,8 +196,8 @@ void CANbusInit(){
         // Time segment 2 = 2
         // Synchronization jump with = 1
         // CAN1 interrupts enable
-        CAN1 -> IER = CAN_IER_TMEIE | CAN_IER_FMPIE0			// Transmit message empty, FIFO message pending,
-                | CAN_IER_ERRIE;							    // Error interrupt interrupt enable
+        CAN1 -> IER = CAN_IER_TMEIE | CAN_IER_FMPIE0		// Transmit message empty, FIFO message pending,
+                | CAN_IER_ERRIE;				// Error interrupt interrupt enable
 
         // Nested vector interrupt controller
         __NVIC_EnableIRQ(CAN1_SCE_IRQn);
